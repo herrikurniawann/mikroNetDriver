@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ridehailing/main_screen.dart';
 // import 'package:ridehailing/auth/login.dart';
-import 'package:ridehailing/auth/register.dart';
+// import 'package:ridehailing/auth/register.dart';
 
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});
@@ -23,7 +24,7 @@ class StartScreen extends StatelessWidget {
             end: Alignment.bottomCenter,
           ),
         ),
-        child: RegisterScreen(),
+        child: MainScreen(),
       ),
     );
   }

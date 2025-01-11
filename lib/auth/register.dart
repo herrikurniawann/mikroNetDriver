@@ -29,10 +29,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              child: Image.asset('assets/images/logo.png', width: 300),
-            ),
-            const SizedBox(height: 20),
+            // Image.asset('assets/images/logo.png', width: 300),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 15),
               child: Padding(
