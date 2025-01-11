@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ridehailing/pages/login.dart';
+import 'package:ridehailing/start_screen.dart';
 
 void main() => runApp(const MyApp());
 
@@ -12,9 +12,8 @@ class MyApp extends StatelessWidget {
       title: 'rideHailingDriver',
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
-      ), 
-      home: LoginForm()
-      // debugShowCheckedModeBanner: ,
+      ),
+      home: StartScreen(),
     );
   }
 }
