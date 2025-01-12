@@ -66,12 +66,12 @@ class _LoginForm extends State<LoginForm> {
                         child: TextFormField(
                           controller: _emailController,
                           decoration: InputDecoration(
-                            hintText: 'Email',
                             labelText: 'Email',
                             filled: true,
                             fillColor: Colors.white,
+                            prefixIcon: Icon(Icons.email),
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(11.63),
+                              borderRadius: BorderRadius.circular(30.0),
                             ),
                           ),
                         ),
@@ -82,10 +82,10 @@ class _LoginForm extends State<LoginForm> {
                           controller: _passwordController,
                           obscureText: _isObscure,
                           decoration: InputDecoration(
-                            hintText: 'Password',
                             labelText: 'Password',
                             filled: true,
                             fillColor: Colors.white,
+                            prefixIcon: Icon(Icons.lock),
                             suffixIcon: IconButton(
                               icon: Icon(
                                 _isObscure
@@ -99,7 +99,7 @@ class _LoginForm extends State<LoginForm> {
                               },
                             ),
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(11.63),
+                              borderRadius: BorderRadius.circular(30.0),
                             ),
                           ),
                         ),

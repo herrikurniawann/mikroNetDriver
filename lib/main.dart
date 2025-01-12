@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ridehailing/auth/login_screen.dart';
+// import 'package:ridehailing/pages/profile_screen.dart';
 
 void main() => runApp(const MyApp());
 

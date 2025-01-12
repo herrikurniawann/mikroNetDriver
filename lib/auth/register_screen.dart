@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:ridehailing/auth/login_screen.dart';
 import 'package:ridehailing/widgets/background_widget.dart';
 import 'package:ridehailing/models/register_api.dart';
 
@@ -15,7 +16,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _passwordConfirmationController = TextEditingController();
+  final TextEditingController _passwordConfirmationController =
+      TextEditingController();
   bool _isObscure = true;
   File? _profileImage;
 
@@ -71,22 +73,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: 100,
                   ),
                   const SizedBox(height: 20),
-                  if (_profileImage != null)
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundImage: FileImage(_profileImage!),
-                    )
-                  else
-                    CircleAvatar(
-                      radius: 50,
-                      child: Icon(Icons.person, size: 50),
-                    ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _pickImage,
-                    child: Text('Upload Photo'),
-                  ),
-                  const SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Form(
@@ -96,12 +82,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           TextFormField(
                             controller: _firstNameController,
                             decoration: InputDecoration(
-                              hintText: 'Name',
                               labelText: 'Name',
                               filled: true,
+                              prefixIcon: Icon(Icons.person),
                               fillColor: Colors.white,
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(11.63),
+                                borderRadius: BorderRadius.circular(30.0),
                               ),
                             ),
                           ),
@@ -109,12 +95,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           TextFormField(
                             controller: _emailController,
                             decoration: InputDecoration(
-                              hintText: 'Email',
                               labelText: 'Email',
                               filled: true,
+                              prefixIcon: Icon(Icons.email),
                               fillColor: Colors.white,
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(11.63),
+                                borderRadius: BorderRadius.circular(30.0),
                               ),
                             ),
                           ),
@@ -123,11 +109,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             controller: _passwordController,
                             obscureText: _isObscure,
                             decoration: InputDecoration(
-                              hintText: 'Password',
                               labelText: 'Password',
                               suffixIcon: IconButton(
                                 icon: Icon(
-                                  _isObscure ? Icons.visibility : Icons.visibility_off,
+                                  _isObscure
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
                                 ),
                                 onPressed: () {
                                   setState(() {
@@ -136,9 +123,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 },
                               ),
                               filled: true,
+                              prefixIcon: Icon(Icons.lock),
                               fillColor: Colors.white,
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(11.63),
+                                borderRadius: BorderRadius.circular(30.0),
                               ),
                             ),
                           ),
@@ -147,11 +135,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             controller: _passwordConfirmationController,
                             obscureText: _isObscure,
                             decoration: InputDecoration(
-                              hintText: 'Password Confirmation',
                               labelText: 'Password Confirmation',
                               suffixIcon: IconButton(
                                 icon: Icon(
-                                  _isObscure ? Icons.visibility : Icons.visibility_off,
+                                  _isObscure
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
                                 ),
                                 onPressed: () {
                                   setState(() {
@@ -160,16 +149,71 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 },
                               ),
                               filled: true,
+                              prefixIcon: Icon(Icons.lock),
                               fillColor: Colors.white,
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(11.63),
+                                borderRadius: BorderRadius.circular(30.0),
                               ),
                             ),
                           ),
                           const SizedBox(height: 20),
                           ElevatedButton(
-                            onPressed: _register,
-                            child: Text('Daftar'),
+                            onPressed: _pickImage,
+                            child: Text('Upload Photo'),
+                          ),
+                          const SizedBox(height: 20),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: _register,
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(11.63),
+                                  ),
+                                  backgroundColor: Colors.white,
+                                ),
+                                child: const Text(
+                                  'Daftar',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const Divider(color: Colors.white, thickness: 1),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'Sudah punya akun?',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14.0,
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => LoginForm()),
+                                  );
+                                },
+                                child: const Text(
+                                  'Masuk',
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
