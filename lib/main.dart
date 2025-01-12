@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ridehailing/start_screen.dart';
+import 'package:ridehailing/auth/login_screen.dart';
 
 void main() => runApp(const MyApp());
 
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: StartScreen(),
+      home: LoginForm(),
     );
   }
 }
