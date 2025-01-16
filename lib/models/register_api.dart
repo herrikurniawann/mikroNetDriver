@@ -6,8 +6,19 @@ Future<void> registerDriver({
   required String email,
   required String password,
   required String passwordConfirmation,
-  File? profileImage,
+  required File profileImage,
 }) async {
+  if (!profileImage.existsSync()) {
+    throw Exception('File gambar tidak ditemukan di path: ${profileImage.path}');
+  }
+
+  final allowedExtensions = ['jpg', 'jpeg', 'png'];
+  final fileExtension = profileImage.path.split('.').last.toLowerCase();
+
+  if (!allowedExtensions.contains(fileExtension)) {
+    throw Exception('Format file tidak didukung: $fileExtension. Gunakan JPG atau PNG.');
+  }
+
   final url = Uri.parse('http://188.166.179.146:8000/api/auth/register/driver');
   final request = http.MultipartRequest('POST', url);
 
@@ -15,21 +26,24 @@ Future<void> registerDriver({
   request.fields['email'] = email;
   request.fields['password'] = password;
   request.fields['password_confirmation'] = passwordConfirmation;
+  request.files.add(
+    await http.MultipartFile.fromPath('profile_picture', profileImage.path),
+  );
 
-  if (profileImage != null) {
-    request.files.add(await http.MultipartFile.fromPath(
-      'profile_picture',
-      profileImage.path,
-    ));
-  }
+  try {
+    final response = await request.send();
+    final responseString = await response.stream.bytesToString();
 
-  final response = await request.send();
-
-  if (response.statusCode == 200) {
-    print('Register successful');
-  } else {
-    print('Register failed: ${response.statusCode}');
-    final responseBody = await response.stream.bytesToString();
-    throw Exception('Register failed: $responseBody');
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print('Register successful');
+      print('Server response: $responseString');
+    } else {
+      print('Register failed: ${response.statusCode}');
+      print('Server response: $responseString');
+      throw Exception('Register failed: $responseString');
+    }
+  } catch (e) {
+    print('Error: $e');
+    throw Exception('Register failed: $e');
   }
 }

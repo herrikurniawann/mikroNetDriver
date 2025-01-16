@@ -1,15 +1,16 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:ridehailing/auth/login_screen.dart';
 import 'package:ridehailing/widgets/background_widget.dart';
 import 'package:ridehailing/models/register_api.dart';
+import 'package:ridehailing/widgets/alert_helper.dart'; // Import AlertHelper
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _RegisterScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
@@ -30,23 +31,87 @@ class _RegisterScreenState extends State<RegisterScreen> {
       setState(() {
         _profileImage = File(result.files.single.path!);
       });
+    } else {
+      AlertHelper.showAlert(
+        context: context,
+        title: 'Gagal memilih gambar',
+        message: 'Silakan pilih ulang gambar.',
+      );
     }
   }
 
   Future<void> _register() async {
+    if (_firstNameController.text.isEmpty) {
+      AlertHelper.showAlert(
+        context: context,
+        title: 'Nama kosong',
+        message: 'Nama tidak boleh kosong.',
+      );
+      return;
+    }
+
+    if (_emailController.text.isEmpty || !_emailController.text.contains('@')) {
+      AlertHelper.showAlert(
+        context: context,
+        title: 'Email tidak valid',
+        message: 'Silakan masukkan email yang valid.',
+      );
+      return;
+    }
+
+    if (_passwordController.text.length < 6) {
+      AlertHelper.showAlert(
+        context: context,
+        title: 'Password terlalu pendek',
+        message: 'Password minimal harus 6 karakter.',
+      );
+      return;
+    }
+
+    if (_passwordController.text != _passwordConfirmationController.text) {
+      AlertHelper.showAlert(
+        context: context,
+        title: 'Konfirmasi Password',
+        message: 'Password dan konfirmasi tidak cocok.',
+      );
+      return;
+    }
+
+    if (_profileImage == null) {
+      AlertHelper.showAlert(
+        context: context,
+        title: 'Gambar belum dipilih',
+        message: 'Harap pilih foto profil.',
+      );
+      return;
+    }
+
     try {
       await registerDriver(
         firstName: _firstNameController.text,
         email: _emailController.text,
         password: _passwordController.text,
         passwordConfirmation: _passwordConfirmationController.text,
-        profileImage: _profileImage,
+        profileImage: _profileImage!,
       );
-      print('Register successful');
+
+      // Registrasi berhasil
+      await AlertHelper.showAlert(
+        context: context,
+        title: 'Registrasi Berhasil',
+        message: 'Akun Anda telah terdaftar. Silakan login.',
+      );
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginForm()),
+      );
     } catch (e) {
-      print(e);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
+      // Tangkap error dengan detail lebih jelas
+      AlertHelper.showAlert(
+        context: context,
+        title: 'Registrasi Gagal',
+        message: 'Terjadi kesalahan: $e',
       );
     }
   }
@@ -67,7 +132,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Komponen UI (tidak berubah)
                   Image.asset(
                     'assets/images/logo.png',
                     height: 100,
@@ -84,7 +148,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             decoration: InputDecoration(
                               labelText: 'Name',
                               filled: true,
-                              prefixIcon: Icon(Icons.person),
+                              prefixIcon: const Icon(Icons.person),
                               fillColor: Colors.white,
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30.0),
@@ -97,7 +161,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             decoration: InputDecoration(
                               labelText: 'Email',
                               filled: true,
-                              prefixIcon: Icon(Icons.email),
+                              prefixIcon: const Icon(Icons.email),
                               fillColor: Colors.white,
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30.0),
@@ -123,7 +187,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 },
                               ),
                               filled: true,
-                              prefixIcon: Icon(Icons.lock),
+                              prefixIcon: const Icon(Icons.lock),
                               fillColor: Colors.white,
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30.0),
@@ -149,7 +213,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 },
                               ),
                               filled: true,
-                              prefixIcon: Icon(Icons.lock),
+                              prefixIcon: const Icon(Icons.lock),
                               fillColor: Colors.white,
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30.0),
@@ -159,7 +223,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           const SizedBox(height: 20),
                           ElevatedButton(
                             onPressed: _pickImage,
-                            child: Text('Upload Photo'),
+                            child: const Text('Upload Photo'),
                           ),
                           const SizedBox(height: 20),
                           Padding(
@@ -201,7 +265,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => LoginForm()),
+                                      builder: (context) => const LoginForm(),
+                                    ),
                                   );
                                 },
                                 child: const Text(
